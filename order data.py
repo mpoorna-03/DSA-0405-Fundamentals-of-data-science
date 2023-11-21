@@ -1,17 +1,31 @@
-item_prices = [2.5, 3.0, 1.75, 4.5]
-quantities = [3, 2, 4, 1]
-discount_rate = 10
-tax_rate = 8
+import pandas as pd
 
-total_cost_before_discounts = sum(price * quantity for price, quantity in zip(item_prices, quantities))
+# Sample data creation (replace this with your actual dataset)
+data = {
+    'customer_id': [1, 2, 1, 3, 2, 3],
+    'order_date': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-06'],
+    'product_name': ['A', 'B', 'A', 'C', 'B', 'C'],
+    'order_quantity': [3, 5, 2, 1, 4, 2]
+}
 
-discount_amount = (discount_rate / 100) * total_cost_before_discounts
-discounted_total_cost = total_cost_before_discounts - discount_amount
+order_data = pd.DataFrame(data)
 
-discounted_total_cost = total_cost_before_discounts - discount_amount
+# 1. Total number of orders made by each customer
+total_orders_by_customer = order_data['customer_id'].value_counts()
+print("Total number of orders by each customer:")
+print(total_orders_by_customer)
+print("\n")
 
-tax_amount = (tax_rate / 100) * discounted_total_cost
+# 2. Average order quantity for each product
+average_order_quantity_per_product = order_data.groupby('product_name')['order_quantity'].mean()
+print("Average order quantity for each product:")
+print(average_order_quantity_per_product)
+print("\n")
 
-final_total_cost = discounted_total_cost + tax_amount
+# 3. Earliest and latest order dates
+order_data['order_date'] = pd.to_datetime(order_data['order_date'])  # Convert to datetime
+earliest_order_date = order_data['order_date'].min()
+latest_order_date = order_data['order_date'].max()
 
-print(f'Total Cost: ${final_total_cost:.2f}')
+print(f"Earliest Order Date: {earliest_order_date}")
+print(f"Latest Order Date: {latest_order_date}")
